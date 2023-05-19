@@ -5,18 +5,16 @@ const TURNS = {
   O: 'o'
 }
 
-const Square =({children, updateBoard,isSelected, index}) => {
+const Square = ({ children, updateBoard, isSelected, index }) => {
   const className = `square ${isSelected} ? 'is-selected': ''}`;
-  
-  
-const handleCLick = ()=>{
-  updateBoard()
-}  
-  
-  
-  
-  return(
-    <div onClick={updateBoard} className='square'>
+
+
+  const handleCLick = () => {
+    updateBoard(index)
+  }
+
+  return (
+    <div onClick={handleCLick} className={className}>
       {children}
     </div>
   )
@@ -25,27 +23,42 @@ const handleCLick = ()=>{
 
 
 function App() {
-  const [board,setBoard] = useState(Array(9).fill(null))
+  const [board, setBoard] = useState(Array(9).fill(null))
 
-  const [turn,setTurn] = useState(TURNS.X)  
+  const [turn, setTurn] = useState(TURNS.X)
+  //null es que no hay ganador, false es que hay un empate
+  const [winner, setWinner] = useState(null)
 
-  const updateBoard = () => {
+
+
+  const updateBoard = (index) => {
+    //no actualizamos esta posicion
+    //si ya tiene algo
+    if (board[index]) return
+    const newBoard = [...board]
+    newBoard[index] = turn
+    setBoard(newBoard)
+    //cambiar el turno
+    const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
+    setTurn(newTurn)
 
   }
+
+
   return (
     <main className='board'>
       <h1>TIC TAC TOE</h1>
-      <section className="game">
+      <section className='game'>
         {
           board.map((cell, index) => {
-            return(
-              <Square 
-              key={index}
-              index={index}
-              updateBoard={updateBoard}
+            return (
+              <Square
+                key={index}
+                index={index}
+                updateBoard={updateBoard}
               >
-               
-                </Square>
+                {board[index]}
+              </Square>
             )
           })
         }
@@ -54,7 +67,7 @@ function App() {
         <Square isSelected={turn === TURNS.X}>
           {TURNS.X}
         </Square>
-          <Square isSelected={turn === TURNS.O}>
+        <Square isSelected={turn === TURNS.O}>
           {TURNS.O}
         </Square>
       </section>
