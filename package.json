@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "standard": "^17.0.0"
+  },
+  "dependencies": {
+    "vite": "^4.3.8"
   }
 }
